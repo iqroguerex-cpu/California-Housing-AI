@@ -20,15 +20,36 @@ st.set_page_config(
 )
 
 # =========================
-# SIDEBAR
+# DARK MODE TOGGLE
 # =========================
-st.sidebar.title("⚙️ Settings")
 dark_mode = st.sidebar.toggle("🌗 Dark Mode")
 
 if dark_mode:
-    sns.set_style("darkgrid")
+    st.markdown("""
+        <style>
+        .stApp {
+            background-color: #0E1117;
+            color: white;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #161B22;
+        }
+        div[data-testid="stMetricValue"] {
+            color: #00FFAA;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    plt.style.use("dark_background")
 else:
-    sns.set_style("whitegrid")
+    st.markdown("""
+        <style>
+        .stApp {
+            background-color: white;
+            color: black;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    plt.style.use("default")
 
 # =========================
 # LOAD DATA
@@ -74,7 +95,7 @@ rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 # HEADER
 # =========================
 st.title("🏠 California Housing Price Prediction")
-st.caption("Linear Regression • Scikit-Learn Dataset • Interactive ML Dashboard")
+st.caption("Linear Regression • Scikit-Learn Dataset • ML Dashboard")
 
 st.divider()
 
@@ -87,7 +108,7 @@ col1.metric("R² Score", f"{r2:.3f}")
 col2.metric("MAE ($100k units)", f"{mae:.3f}")
 col3.metric("RMSE ($100k units)", f"{rmse:.3f}")
 
-st.info("Note: Target values are in units of $100,000")
+st.info("Target values are in units of $100,000")
 
 st.divider()
 
@@ -99,7 +120,7 @@ tab1, tab2, tab3, tab4 = st.tabs(
 )
 
 # =========================
-# TAB 1 - DATA
+# TAB 1 — DATA
 # =========================
 with tab1:
     st.subheader("Dataset Preview")
@@ -107,11 +128,11 @@ with tab1:
 
     st.subheader("Feature Correlation Heatmap")
     fig1, ax1 = plt.subplots(figsize=(10, 6))
-    sns.heatmap(df.corr(), annot=False, cmap="coolwarm", ax=ax1)
+    sns.heatmap(df.corr(), cmap="coolwarm", ax=ax1)
     st.pyplot(fig1)
 
 # =========================
-# TAB 2 - PREDICTIONS
+# TAB 2 — PREDICTIONS
 # =========================
 with tab2:
     st.subheader("Actual vs Predicted Prices")
@@ -131,7 +152,7 @@ with tab2:
     st.dataframe(coef_df)
 
 # =========================
-# TAB 3 - RESIDUALS
+# TAB 3 — RESIDUALS
 # =========================
 with tab3:
     residuals = y_test - y_pred
@@ -146,12 +167,13 @@ with tab3:
     st.pyplot(fig3)
 
     st.subheader("Residual Distribution")
+
     fig4, ax4 = plt.subplots()
     sns.histplot(residuals, kde=True, ax=ax4)
     st.pyplot(fig4)
 
 # =========================
-# TAB 4 - DOWNLOAD
+# TAB 4 — DOWNLOAD
 # =========================
 with tab4:
     results_df = pd.DataFrame({
