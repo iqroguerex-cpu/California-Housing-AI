@@ -138,9 +138,16 @@ with tab2:
     st.subheader("Actual vs Predicted Prices")
 
     fig2, ax2 = plt.subplots()
-    sns.scatterplot(x=y_test, y=y_pred, alpha=0.4, ax=ax2)
+    ax2.scatter(y_test, y_pred, alpha=0.4)
     ax2.set_xlabel("Actual Price")
     ax2.set_ylabel("Predicted Price")
+    ax2.set_title("Actual vs Predicted")
+
+    # Perfect prediction line
+    min_val = min(min(y_test), min(y_pred))
+    max_val = max(max(y_test), max(y_pred))
+    ax2.plot([min_val, max_val], [min_val, max_val], color='red')
+
     st.pyplot(fig2)
 
     st.subheader("Feature Importance (Linear Coefficients)")
@@ -160,7 +167,7 @@ with tab3:
     st.subheader("Residual Plot")
 
     fig3, ax3 = plt.subplots()
-    sns.scatterplot(x=y_pred, y=residuals, alpha=0.4, ax=ax3)
+    ax3.scatter(y_pred, residuals, alpha=0.4)
     ax3.axhline(0, color="red")
     ax3.set_xlabel("Predicted Price")
     ax3.set_ylabel("Residuals")
