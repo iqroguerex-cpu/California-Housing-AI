@@ -20,36 +20,25 @@ st.set_page_config(
 )
 
 # =========================
-# DARK MODE TOGGLE
+# FORCE BLACK THEME
 # =========================
-dark_mode = st.sidebar.toggle("🌗 Dark Mode")
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #0E1117;
+        color: white;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #161B22;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #00FFAA;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-if dark_mode:
-    st.markdown("""
-        <style>
-        .stApp {
-            background-color: #0E1117;
-            color: white;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #161B22;
-        }
-        div[data-testid="stMetricValue"] {
-            color: #00FFAA;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    plt.style.use("dark_background")
-else:
-    st.markdown("""
-        <style>
-        .stApp {
-            background-color: white;
-            color: black;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    plt.style.use("default")
+plt.style.use("dark_background")
+sns.set_style("darkgrid")
 
 # =========================
 # LOAD DATA
@@ -143,7 +132,6 @@ with tab2:
     ax2.set_ylabel("Predicted Price")
     ax2.set_title("Actual vs Predicted")
 
-    # Perfect prediction line
     min_val = min(min(y_test), min(y_pred))
     max_val = max(max(y_test), max(y_pred))
     ax2.plot([min_val, max_val], [min_val, max_val], color='red')
